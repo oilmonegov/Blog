@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\PostStatus;
-use App\Enums\UserRole;
 use App\Models\Post;
 use App\Models\User;
 
@@ -25,7 +24,9 @@ class PostPolicy
     public function view(?User $user, Post $post): bool
     {
         // Public can view published posts
-        if ($post->status === PostStatus::PUBLISHED && $post->published_at !== null) {
+        /** @var PostStatus $status */
+        $status = $post->status;
+        if ($status === PostStatus::PUBLISHED && $post->published_at !== null) {
             return true;
         }
 

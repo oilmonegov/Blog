@@ -15,4 +15,3 @@ enum UserRole: string
         };
     }
 }
-

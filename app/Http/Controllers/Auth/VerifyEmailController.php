@@ -18,8 +18,12 @@ class VerifyEmailController extends Controller
             return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        $user = $request->user();
+        if ($user && $user->markEmailAsVerified()) {
+            // User model doesn't implement MustVerifyEmail, but we can still dispatch the event
+            // The event will work even without the interface
+            /** @var \Illuminate\Contracts\Auth\MustVerifyEmail $user */
+            event(new Verified($user));
         }
 
         return redirect()->intended(route('dashboard', absolute: false).'?verified=1');

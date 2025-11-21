@@ -1,58 +1,527 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simple Blog System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, feature-rich blog system built with Laravel 12.x that allows administrators and authors to create, manage, and publish blog posts with a complete commenting system.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core Functionality
+- **User Authentication**: Registration, login, and email verification
+- **Role-Based Access Control**: Admin and Author roles with granular permissions
+- **Post Management**: Create, edit, delete, and publish blog posts
+- **Category Management**: Organize posts with multiple categories
+- **Tag System**: Auto-create tags when adding to posts
+- **Comment System**: Authenticated users can comment on posts (auto-approved)
+- **Public Frontend**: Beautiful, responsive blog listing and post detail pages
+- **Admin Dashboard**: Full content management interface
+- **Author Dashboard**: Manage your own posts and comments
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Technical Features
+- **SEO Optimized**: Meta titles, descriptions, and SEO-friendly URLs
+- **Soft Deletes**: Posts and comments can be restored
+- **Rate Limiting**: Comment submissions are rate-limited
+- **Auto-Generated Slugs**: SEO-friendly URLs from post titles
+- **Auto-Generated Excerpts**: Automatic excerpt generation from content
+- **Responsive Design**: Mobile-first design with TailwindCSS
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technology Stack
 
-## Learning Laravel
+- **Backend**: Laravel 12.x
+- **Database**: MySQL (SQLite for development)
+- **Cache/Sessions**: Redis (optional, database fallback)
+- **Frontend**: Blade Templates with TailwindCSS
+- **Testing**: PestPHP
+- **Static Analysis**: Larastan (Level 5)
+- **Code Style**: Laravel Pint (PSR-12)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Requirements
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP >= 8.2
+- Composer
+- Node.js >= 18.x and npm
+- MySQL >= 8.0 (or SQLite for development)
+- Redis (optional, for production caching)
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the Repository
 
-### Premium Partners
+```bash
+git clone <repository-url>
+cd AFE
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install Dependencies
+
+```bash
+# Install PHP dependencies
+composer install
+
+# Install Node.js dependencies
+npm install
+```
+
+### 3. Environment Setup
+
+Copy the environment file and configure it:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Edit `.env` file with your configuration (see [Environment Variables](#environment-variables) section).
+
+### 4. Database Setup
+
+```bash
+# Run migrations
+php artisan migrate
+
+# (Optional) Seed the database with sample data
+php artisan db:seed
+```
+
+### 5. Build Frontend Assets
+
+```bash
+# Development
+npm run dev
+
+# Production
+npm run build
+```
+
+### 6. Start Development Server
+
+```bash
+# Start Laravel development server
+php artisan serve
+
+# Or use the dev script (includes queue, logs, and vite)
+composer run dev
+```
+
+The application will be available at `http://localhost:8000`.
+
+## Environment Variables
+
+### Application
+
+```env
+APP_NAME="Simple Blog System"
+APP_ENV=local
+APP_KEY=base64:... # Generated by php artisan key:generate
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=http://localhost:8000
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+```
+
+### Database
+
+For **MySQL** (Production):
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=blog_system
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+For **SQLite** (Development):
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database/database.sqlite
+```
+
+### Cache & Sessions
+
+For **Redis** (Production):
+```env
+CACHE_STORE=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+For **Database** (Development):
+```env
+CACHE_STORE=database
+SESSION_DRIVER=database
+QUEUE_CONNECTION=database
+```
+
+### Mail Configuration
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+## Database Schema
+
+### Tables
+
+#### `users`
+- `id` (bigint, primary key)
+- `name` (string)
+- `email` (string, unique)
+- `email_verified_at` (timestamp, nullable)
+- `password` (string)
+- `role` (enum: 'admin', 'author', default: 'author')
+- `remember_token` (string, nullable)
+- `created_at`, `updated_at` (timestamps)
+
+#### `posts`
+- `id` (bigint, primary key)
+- `title` (string)
+- `slug` (string, unique)
+- `content` (text)
+- `excerpt` (text)
+- `status` (enum: 'draft', 'published', default: 'draft')
+- `author_id` (foreign key to users)
+- `published_at` (timestamp, nullable)
+- `meta_title` (string, nullable)
+- `meta_description` (text, nullable)
+- `deleted_at` (timestamp, nullable, soft deletes)
+- `created_at`, `updated_at` (timestamps)
+- **Indexes**: `status`, `author_id`, `published_at`
+
+#### `categories`
+- `id` (bigint, primary key)
+- `name` (string, unique)
+- `slug` (string, unique)
+- `description` (text, nullable)
+- `created_at`, `updated_at` (timestamps)
+
+#### `tags`
+- `id` (bigint, primary key)
+- `name` (string, unique)
+- `slug` (string, unique)
+- `created_at`, `updated_at` (timestamps)
+
+#### `comments`
+- `id` (bigint, primary key)
+- `content` (text)
+- `post_id` (foreign key to posts, cascade delete)
+- `user_id` (foreign key to users, cascade delete)
+- `approved_at` (timestamp, nullable, auto-set on create)
+- `deleted_at` (timestamp, nullable, soft deletes)
+- `created_at`, `updated_at` (timestamps)
+- **Indexes**: `post_id`, `user_id`, `approved_at`
+
+#### `category_post` (Pivot Table)
+- `id` (bigint, primary key)
+- `category_id` (foreign key to categories, cascade delete)
+- `post_id` (foreign key to posts, cascade delete)
+- `created_at`, `updated_at` (timestamps)
+- **Unique Constraint**: `(category_id, post_id)`
+
+#### `post_tag` (Pivot Table)
+- `id` (bigint, primary key)
+- `post_id` (foreign key to posts, cascade delete)
+- `tag_id` (foreign key to tags, cascade delete)
+- `created_at`, `updated_at` (timestamps)
+- **Unique Constraint**: `(post_id, tag_id)`
+
+### Relationships
+
+- **User** has many **Posts** and **Comments**
+- **Post** belongs to **Author** (User), belongs to many **Categories** and **Tags**, has many **Comments**
+- **Category** belongs to many **Posts**
+- **Tag** belongs to many **Posts**
+- **Comment** belongs to **Post** and **User**
+
+## Routes
+
+### Public Routes
+
+| Method | URI | Name | Description |
+|--------|-----|------|-------------|
+| GET | `/` | `posts.index` | Blog listing page (published posts) |
+| GET | `/posts/{slug}` | `posts.show` | Individual post page |
+| GET | `/categories/{slug}` | `categories.show` | Category archive page |
+| GET | `/tags/{slug}` | `tags.show` | Tag archive page |
+
+### Authenticated Routes
+
+| Method | URI | Name | Description |
+|--------|-----|------|-------------|
+| GET | `/dashboard` | `dashboard` | User dashboard |
+| GET | `/profile` | `profile.edit` | Edit profile |
+| PATCH | `/profile` | `profile.update` | Update profile |
+| DELETE | `/profile` | `profile.destroy` | Delete account |
+| POST | `/comments` | `comments.store` | Create comment (rate limited: 10/min) |
+
+### Admin Routes (Requires `admin` role)
+
+| Method | URI | Name | Description |
+|--------|-----|------|-------------|
+| GET | `/admin/dashboard` | `admin.dashboard` | Admin dashboard |
+| GET | `/admin/posts` | `admin.posts.index` | List all posts |
+| GET | `/admin/posts/create` | `admin.posts.create` | Create post form |
+| POST | `/admin/posts` | `admin.posts.store` | Store new post |
+| GET | `/admin/posts/{post}` | `admin.posts.show` | View post |
+| GET | `/admin/posts/{post}/edit` | `admin.posts.edit` | Edit post form |
+| PUT/PATCH | `/admin/posts/{post}` | `admin.posts.update` | Update post |
+| DELETE | `/admin/posts/{post}` | `admin.posts.destroy` | Delete post |
+| PATCH | `/admin/posts/{post}/publish` | `admin.posts.publish` | Publish/unpublish post |
+| GET | `/admin/categories` | `admin.categories.index` | List categories |
+| GET | `/admin/categories/create` | `admin.categories.create` | Create category form |
+| POST | `/admin/categories` | `admin.categories.store` | Store category |
+| GET | `/admin/categories/{category}/edit` | `admin.categories.edit` | Edit category form |
+| PUT/PATCH | `/admin/categories/{category}` | `admin.categories.update` | Update category |
+| DELETE | `/admin/categories/{category}` | `admin.categories.destroy` | Delete category |
+| GET | `/admin/comments` | `admin.comments.index` | List all comments |
+| DELETE | `/admin/comments/{comment}` | `admin.comments.destroy` | Delete comment |
+
+### Author Routes (Requires `author` role)
+
+| Method | URI | Name | Description |
+|--------|-----|------|-------------|
+| GET | `/author/posts` | `author.posts.index` | List own posts |
+| GET | `/author/posts/create` | `author.posts.create` | Create post form |
+| POST | `/author/posts` | `author.posts.store` | Store new post |
+| GET | `/author/posts/{post}` | `author.posts.show` | View own post |
+| GET | `/author/posts/{post}/edit` | `author.posts.edit` | Edit own post form |
+| PUT/PATCH | `/author/posts/{post}` | `author.posts.update` | Update own post |
+| DELETE | `/author/posts/{post}` | `author.posts.destroy` | Delete own post |
+| PATCH | `/author/posts/{post}/publish` | `author.posts.publish` | Publish/unpublish own post |
+| GET | `/author/comments` | `author.comments.index` | List comments on own posts |
+| DELETE | `/author/comments/{comment}` | `author.comments.destroy` | Delete comment on own post |
+
+## User Roles & Permissions
+
+### Admin
+- Full access to all posts (create, edit, delete, publish any post)
+- Manage all categories
+- Delete any comment
+- Access admin dashboard
+
+### Author
+- Create, edit, delete, and publish own posts only
+- Delete comments on own posts only
+- Access author dashboard
+
+### Public User
+- View published posts
+- Comment on posts (requires authentication)
+- Browse by category and tag
+
+## Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+composer test
+# or
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+
+# Run specific test file
+php artisan test tests/Feature/PostTest.php
+```
+
+### Test Coverage
+
+The project aims for 100% test coverage with:
+- Feature tests for all routes and controllers
+- Unit tests for models and services
+- Policy tests for authorization
+- Form request validation tests
+
+### Static Analysis
+
+```bash
+# Run Larastan (PHPStan for Laravel)
+./vendor/bin/phpstan analyse
+
+# Run Laravel Pint (code style)
+./vendor/bin/pint
+```
+
+## Code Quality
+
+### Standards
+- **PSR-12** code style (enforced by Laravel Pint)
+- **Larastan Level 5** (strictest static analysis)
+- **100% test coverage** target
+- **SOLID principles** adherence
+
+### Commands
+
+```bash
+# Format code
+./vendor/bin/pint
+
+# Static analysis
+./vendor/bin/phpstan analyse
+
+# Run tests
+composer test
+```
+
+## Deployment
+
+### Production Checklist
+
+1. **Environment Configuration**
+   - Set `APP_ENV=production`
+   - Set `APP_DEBUG=false`
+   - Generate new `APP_KEY` if needed
+   - Configure production database credentials
+   - Configure Redis for cache and sessions
+
+2. **Optimize Application**
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   php artisan event:cache
+   ```
+
+3. **Build Assets**
+   ```bash
+   npm run build
+   ```
+
+4. **Run Migrations**
+   ```bash
+   php artisan migrate --force
+   ```
+
+5. **Set Permissions**
+   ```bash
+   chmod -R 775 storage bootstrap/cache
+   chown -R www-data:www-data storage bootstrap/cache
+   ```
+
+6. **Configure Web Server**
+   - Point document root to `public/` directory
+   - Configure URL rewriting for Laravel
+
+### Production Environment Variables
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://yourdomain.com
+
+DB_CONNECTION=mysql
+DB_HOST=your_db_host
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+CACHE_STORE=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+
+REDIS_HOST=your_redis_host
+REDIS_PASSWORD=your_redis_password
+REDIS_PORT=6379
+```
+
+### Deployment Script Example
+
+```bash
+#!/bin/bash
+# deploy.sh
+
+# Pull latest code
+git pull origin main
+
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+
+# Run migrations
+php artisan migrate --force
+
+# Optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Clear caches
+php artisan cache:clear
+php artisan view:clear
+```
+
+## Development
+
+### Available Commands
+
+```bash
+# Development server with queue, logs, and vite
+composer run dev
+
+# Run tests
+composer test
+
+# Code formatting
+./vendor/bin/pint
+
+# Static analysis
+./vendor/bin/phpstan analyse
+```
+
+### Project Structure
+
+```
+app/
+├── Enums/          # Enumerations (PostStatus, UserRole)
+├── Http/
+│   ├── Controllers/    # Application controllers
+│   ├── Middleware/     # Custom middleware
+│   └── Requests/       # Form request validation
+├── Models/         # Eloquent models
+├── Policies/       # Authorization policies
+├── Providers/      # Service providers
+├── Services/       # Business logic services
+└── View/           # View components
+
+database/
+├── factories/     # Model factories
+├── migrations/     # Database migrations
+└── seeders/        # Database seeders
+
+resources/
+├── css/            # Stylesheets
+├── js/             # JavaScript
+└── views/          # Blade templates
+
+routes/
+├── web.php         # Web routes
+└── auth.php        # Authentication routes
+
+tests/
+├── Feature/        # Feature tests
+└── Unit/           # Unit tests
+```
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Follow PSR-12 code style
+2. Write tests for new features
+3. Ensure Larastan level 5 passes
+4. Update documentation as needed
 
 ## License
 

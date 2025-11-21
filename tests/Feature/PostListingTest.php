@@ -8,7 +8,7 @@ use App\Models\User;
 
 test('blog index page displays published posts', function () {
     $author = User::factory()->create();
-    
+
     $publishedPost = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -30,7 +30,7 @@ test('blog index page displays published posts', function () {
 
 test('blog index page displays posts in latest first order', function () {
     $author = User::factory()->create();
-    
+
     $olderPost = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -51,7 +51,7 @@ test('blog index page displays posts in latest first order', function () {
 
 test('blog index page displays post previews with author and date', function () {
     $author = User::factory()->create(['name' => 'John Doe']);
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -70,13 +70,13 @@ test('blog index page displays categories and tags', function () {
     $author = User::factory()->create();
     $category = Category::factory()->create(['name' => 'Technology']);
     $tag = Tag::factory()->create(['name' => 'Laravel']);
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
         'published_at' => now(),
     ]);
-    
+
     $post->categories()->attach($category);
     $post->tags()->attach($tag);
 
@@ -89,7 +89,7 @@ test('blog index page displays categories and tags', function () {
 
 test('blog index page paginates posts', function () {
     $author = User::factory()->create();
-    
+
     Post::factory()->count(15)->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -109,4 +109,3 @@ test('blog index page shows empty state when no posts', function () {
     $response->assertStatus(200);
     $response->assertSee('No posts available yet');
 });
-

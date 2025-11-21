@@ -71,7 +71,10 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::ADMIN;
+        /** @var UserRole $role */
+        $role = $this->role;
+
+        return $role === UserRole::ADMIN;
     }
 
     /**
@@ -79,6 +82,9 @@ class User extends Authenticatable
      */
     public function isAuthor(): bool
     {
-        return $this->role === UserRole::AUTHOR;
+        /** @var UserRole $role */
+        $role = $this->role;
+
+        return $role === UserRole::AUTHOR;
     }
 }

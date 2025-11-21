@@ -90,4 +90,3 @@ class CategoryController extends Controller
             ->with('success', 'Category deleted successfully.');
     }
 }
-

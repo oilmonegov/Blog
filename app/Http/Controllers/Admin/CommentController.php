@@ -58,4 +58,3 @@ class CommentController extends Controller
             ->with('success', 'Comment deleted successfully.');
     }
 }
-

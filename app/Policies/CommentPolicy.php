@@ -25,7 +25,10 @@ class CommentPolicy
         }
 
         // Authors can view comments on their own posts
-        return $user->isAuthor() && $comment->post->author_id === $user->id;
+        $post = $comment->post;
+        assert($post instanceof \App\Models\Post);
+
+        return $user->isAuthor() && $post->author_id === $user->id;
     }
 
     /**
@@ -57,6 +60,9 @@ class CommentPolicy
         }
 
         // Authors can delete comments on their own posts
-        return $user->isAuthor() && $comment->post->author_id === $user->id;
+        $post = $comment->post;
+        assert($post instanceof \App\Models\Post);
+
+        return $user->isAuthor() && $post->author_id === $user->id;
     }
 }

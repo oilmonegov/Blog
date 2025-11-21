@@ -54,7 +54,9 @@ class CommentController extends Controller
         $this->authorize('delete', $comment);
 
         // Ensure author can only delete comments on their own posts
-        if ($comment->post->author_id !== $request->user()->id) {
+        $post = $comment->post;
+        assert($post instanceof \App\Models\Post);
+        if ($post->author_id !== $request->user()->id) {
             abort(403);
         }
 
@@ -64,4 +66,3 @@ class CommentController extends Controller
             ->with('success', 'Comment deleted successfully.');
     }
 }
-

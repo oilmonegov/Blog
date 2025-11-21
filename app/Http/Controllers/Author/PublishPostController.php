@@ -21,7 +21,9 @@ class PublishPostController extends Controller
             abort(403);
         }
 
-        if ($post->status === PostStatus::PUBLISHED) {
+        /** @var PostStatus $status */
+        $status = $post->status;
+        if ($status === PostStatus::PUBLISHED) {
             $post->update([
                 'status' => PostStatus::DRAFT,
                 'published_at' => null,
@@ -40,4 +42,3 @@ class PublishPostController extends Controller
             ->with('success', 'Post published successfully.');
     }
 }
-

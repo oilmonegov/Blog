@@ -69,10 +69,11 @@ test('tags are auto-created when added to posts', function () {
     $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
     $post = Post::factory()->create(['author_id' => $admin->id]);
 
-    $this->actingAs($admin)->post(route('admin.posts.update', $post), [
+    $this->actingAs($admin)->put(route('admin.posts.update', $post), [
         'title' => $post->title,
         'content' => $post->content,
         'status' => $post->status->value,
+        'slug' => $post->slug,
         'tags' => 'laravel, php, web-development',
     ]);
 
@@ -88,10 +89,11 @@ test('tag slug is auto-generated when created via post', function () {
     $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
     $post = Post::factory()->create(['author_id' => $admin->id]);
 
-    $this->actingAs($admin)->post(route('admin.posts.update', $post), [
+    $this->actingAs($admin)->put(route('admin.posts.update', $post), [
         'title' => $post->title,
         'content' => $post->content,
         'status' => $post->status->value,
+        'slug' => $post->slug,
         'tags' => 'Web Development',
     ]);
 
@@ -104,10 +106,11 @@ test('duplicate tags are not created when added to posts', function () {
     $post = Post::factory()->create(['author_id' => $admin->id]);
     $existingTag = Tag::factory()->create(['name' => 'laravel']);
 
-    $this->actingAs($admin)->post(route('admin.posts.update', $post), [
+    $this->actingAs($admin)->put(route('admin.posts.update', $post), [
         'title' => $post->title,
         'content' => $post->content,
         'status' => $post->status->value,
+        'slug' => $post->slug,
         'tags' => 'laravel, php',
     ]);
 
@@ -118,4 +121,3 @@ test('duplicate tags are not created when added to posts', function () {
     $post->refresh();
     expect($post->tags->count())->toBe(2);
 });
-

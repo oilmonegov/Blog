@@ -9,7 +9,7 @@ use App\Models\User;
 
 test('post detail page displays published post', function () {
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -27,7 +27,7 @@ test('post detail page displays published post', function () {
 
 test('post detail page returns 404 for draft post', function () {
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::DRAFT,
@@ -49,13 +49,13 @@ test('post detail page displays categories and tags', function () {
     $author = User::factory()->create();
     $category = Category::factory()->create(['name' => 'Technology']);
     $tag = Tag::factory()->create(['name' => 'Laravel']);
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
         'published_at' => now(),
     ]);
-    
+
     $post->categories()->attach($category);
     $post->tags()->attach($tag);
 
@@ -69,7 +69,7 @@ test('post detail page displays categories and tags', function () {
 test('post detail page displays approved comments', function () {
     $author = User::factory()->create();
     $commenter = User::factory()->create(['name' => 'Commenter']);
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -103,7 +103,7 @@ test('post detail page displays approved comments', function () {
 test('post detail page displays comment form for authenticated users', function () {
     $user = User::factory()->create();
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -118,7 +118,7 @@ test('post detail page displays comment form for authenticated users', function 
 
 test('post detail page shows login prompt for unauthenticated users', function () {
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -133,7 +133,7 @@ test('post detail page shows login prompt for unauthenticated users', function (
 
 test('post detail page includes SEO meta tags', function () {
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -151,7 +151,7 @@ test('post detail page includes SEO meta tags', function () {
 
 test('post detail page uses title and excerpt as fallback for SEO', function () {
     $author = User::factory()->create();
-    
+
     $post = Post::factory()->create([
         'author_id' => $author->id,
         'status' => PostStatus::PUBLISHED,
@@ -168,4 +168,3 @@ test('post detail page uses title and excerpt as fallback for SEO', function () 
         $response->assertSee($post->excerpt, false);
     }
 });
-

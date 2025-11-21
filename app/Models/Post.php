@@ -106,6 +106,18 @@ class Post extends Model
     }
 
     /**
+     * Calculate reading time in minutes.
+     * Assumes average reading speed of 200 words per minute.
+     */
+    public function getReadingTimeAttribute(): int
+    {
+        $wordCount = str_word_count(strip_tags($this->content ?? ''));
+        $readingTime = max(1, (int) ceil($wordCount / 200));
+
+        return $readingTime;
+    }
+
+    /**
      * Scope a query to only include published posts.
      */
     public function scopePublished($query)
@@ -144,7 +156,10 @@ class Post extends Model
                 }
             }
 
-            if ($post->isDirty('content') && empty($post->excerpt)) {
+            // Regenerate excerpt if content changed and excerpt is empty/null
+            // Or if excerpt is null/empty and we have content
+            if (($post->isDirty('content') && empty($post->excerpt)) || 
+                (empty($post->excerpt) && ! empty($post->content))) {
                 $post->excerpt = $post->generateExcerpt($post->content);
             }
 

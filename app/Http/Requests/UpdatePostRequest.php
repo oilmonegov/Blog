@@ -14,7 +14,7 @@ class UpdatePostRequest extends FormRequest
     public function authorize(): bool
     {
         $post = $this->route('post');
-        
+
         return $this->user()->can('update', $post);
     }
 
@@ -58,4 +58,3 @@ class UpdatePostRequest extends FormRequest
         ];
     }
 }
-

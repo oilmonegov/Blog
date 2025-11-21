@@ -207,3 +207,93 @@ test('post handles empty slug edge case', function () {
     expect($post->slug)->toBe('test-post');
 });
 
+test('post generates excerpt from content on creation', function () {
+    $user = User::factory()->create();
+
+    $post = Post::create([
+        'title' => 'Test Post',
+        'content' => 'This is a very long content that should be truncated to create an excerpt. '.
+            'The excerpt should be limited to 150 characters by default. '.
+            'This is additional content that will be cut off.',
+        'status' => PostStatus::DRAFT,
+        'author_id' => $user->id,
+    ]);
+
+    expect($post->excerpt)->not->toBeEmpty();
+    // Str::limit adds "..." so it can be slightly over 150
+    expect(strlen($post->excerpt))->toBeLessThanOrEqual(153);
+});
+
+test('post generates excerpt with custom length', function () {
+    $user = User::factory()->create();
+
+    $post = new Post([
+        'title' => 'Test Post',
+        'content' => 'This is a very long content that should be truncated.',
+        'status' => PostStatus::DRAFT,
+        'author_id' => $user->id,
+    ]);
+
+    $excerpt = $post->generateExcerpt($post->content, 50);
+    // Str::limit adds "..." so it can be up to 53 characters for a 50 char limit
+    expect(strlen($excerpt))->toBeLessThanOrEqual(53);
+});
+
+test('post excerpt strips HTML tags', function () {
+    $user = User::factory()->create();
+
+    $post = Post::create([
+        'title' => 'Test Post',
+        'content' => '<p>This is <strong>HTML</strong> content with <em>tags</em>.</p>',
+        'status' => PostStatus::DRAFT,
+        'author_id' => $user->id,
+    ]);
+
+    expect($post->excerpt)->not->toContain('<');
+    expect($post->excerpt)->not->toContain('>');
+});
+
+test('post published scope only returns published posts', function () {
+    $user = User::factory()->create();
+
+    Post::create([
+        'title' => 'Published Post',
+        'content' => 'Content',
+        'status' => PostStatus::PUBLISHED,
+        'published_at' => now(),
+        'author_id' => $user->id,
+    ]);
+
+    Post::create([
+        'title' => 'Draft Post',
+        'content' => 'Content',
+        'status' => PostStatus::DRAFT,
+        'published_at' => null,
+        'author_id' => $user->id,
+    ]);
+
+    $publishedPosts = Post::published()->get();
+
+    expect($publishedPosts)->toHaveCount(1);
+    expect($publishedPosts->first()->title)->toBe('Published Post');
+});
+
+test('post sets published_at when status changes to published', function () {
+    $user = User::factory()->create();
+
+    $post = Post::create([
+        'title' => 'Test Post',
+        'content' => 'Content',
+        'status' => PostStatus::DRAFT,
+        'published_at' => null,
+        'author_id' => $user->id,
+    ]);
+
+    expect($post->published_at)->toBeNull();
+
+    $post->update([
+        'status' => PostStatus::PUBLISHED,
+    ]);
+
+    expect($post->fresh()->published_at)->not->toBeNull();
+});

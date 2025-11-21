@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +17,21 @@ class TagFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->word();
+        $name = fake()->unique()->word();
+        $baseSlug = \Illuminate\Support\Str::slug($name);
+        
+        // Generate a unique slug using the model's logic
+        // Check if slug exists and append counter if needed
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Tag::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
 
         return [
             'name' => $name,
-            'slug' => \Illuminate\Support\Str::slug($name),
+            'slug' => $slug,
         ];
     }
 }

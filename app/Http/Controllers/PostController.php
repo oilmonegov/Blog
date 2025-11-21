@@ -40,10 +40,34 @@ class PostController extends Controller
             ->with('user')
             ->get();
 
+        // Get related posts (same categories or tags, excluding current post)
+        $relatedPosts = Post::published()
+            ->where('id', '!=', $post->id)
+            ->where(function ($query) use ($post) {
+                // Posts with same categories
+                $categoryIds = $post->categories->pluck('id');
+                if ($categoryIds->isNotEmpty()) {
+                    $query->whereHas('categories', function ($q) use ($categoryIds) {
+                        $q->whereIn('categories.id', $categoryIds);
+                    });
+                }
+                // Or posts with same tags
+                $tagIds = $post->tags->pluck('id');
+                if ($tagIds->isNotEmpty()) {
+                    $query->orWhereHas('tags', function ($q) use ($tagIds) {
+                        $q->whereIn('tags.id', $tagIds);
+                    });
+                }
+            })
+            ->with(['author', 'categories', 'tags'])
+            ->orderBy('published_at', 'desc')
+            ->limit(3)
+            ->get();
+
         return view('posts.show', [
             'post' => $post,
             'comments' => $comments,
+            'relatedPosts' => $relatedPosts,
         ]);
     }
 }
-

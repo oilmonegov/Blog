@@ -190,4 +190,3 @@ test('category archive page shows posts count in admin index', function () {
     $categoryData = $categories->firstWhere('id', $category->id);
     expect($categoryData->posts_count)->toBe(5);
 });
-

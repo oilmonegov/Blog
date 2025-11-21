@@ -11,7 +11,6 @@ class TagService
      * Sync tags from comma-separated string.
      * Creates tags if they don't exist.
      *
-     * @param  string  $tagsString
      * @return array<int>
      */
     public function syncTags(string $tagsString): array
@@ -31,4 +30,3 @@ class TagService
         return $tagIds;
     }
 }
-

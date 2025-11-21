@@ -18,6 +18,7 @@ class PostController extends Controller
     public function __construct(
         private TagService $tagService
     ) {}
+
     /**
      * Display a listing of the resource (only own posts).
      */
@@ -72,7 +73,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->title,
             'slug' => $request->slug,
-            'content' => $request->content,
+            'content' => $request->input('content'),
             'excerpt' => $request->excerpt,
             'status' => PostStatus::from($request->status),
             'author_id' => $request->user()->id,
@@ -145,15 +146,21 @@ class PostController extends Controller
             abort(403);
         }
 
-        $post->update([
+        $updateData = [
             'title' => $request->title,
             'slug' => $request->slug,
-            'content' => $request->content,
-            'excerpt' => $request->excerpt,
+            'content' => $request->input('content'),
             'status' => PostStatus::from($request->status),
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
-        ]);
+        ];
+
+        // Only update excerpt if provided
+        if ($request->filled('excerpt')) {
+            $updateData['excerpt'] = $request->excerpt;
+        }
+
+        $post->update($updateData);
 
         // Sync categories
         if ($request->filled('categories')) {
@@ -191,6 +198,4 @@ class PostController extends Controller
         return redirect()->route('author.posts.index')
             ->with('success', 'Post deleted successfully.');
     }
-
 }
-

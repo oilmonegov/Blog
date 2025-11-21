@@ -8,7 +8,9 @@ use Illuminate\View\View;
 class PublicLayout extends Component
 {
     public ?string $metaTitle;
+
     public ?string $metaDescription;
+
     public $post;
 
     /**
@@ -29,4 +31,3 @@ class PublicLayout extends Component
         return view('layouts.public');
     }
 }
-

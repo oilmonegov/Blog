@@ -279,7 +279,7 @@ test('regular user without author role cannot access author comment routes', fun
     // this test verifies the middleware works correctly.
     // In practice, all users should have a role (AUTHOR or ADMIN).
     // This test is kept for completeness but may need adjustment based on business rules.
-    
+
     // Actually, since the middleware allows both authors and admins,
     // and there's no "regular user" role, we'll test that a user
     // who is explicitly not an author (but is admin) can still access
@@ -291,4 +291,3 @@ test('regular user without author role cannot access author comment routes', fun
     // Admin should be able to access author routes (by design)
     $response->assertStatus(200);
 });
-
