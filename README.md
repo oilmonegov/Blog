@@ -47,7 +47,7 @@ A modern, feature-rich blog system built with Laravel 12.x that allows administr
 
 ```bash
 git clone <repository-url>
-cd AFE
+cd Blog
 ```
 
 ### 2. Install Dependencies
