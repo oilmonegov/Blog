@@ -20,6 +20,9 @@ export default {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
                 'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             },
+            boxShadow: {
+                'brand-glow': '0 25px 50px -12px rgba(147, 51, 234, 0.45)',
+            },
             animation: {
                 'fade-in': 'fadeIn 0.5s ease-in-out',
                 'slide-up': 'slideUp 0.5s ease-out',

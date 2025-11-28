@@ -69,3 +69,4 @@ echo -e "  - Verify .env file is configured correctly"
 echo -e "  - Check application logs for any errors"
 echo -e "  - Test the application in a browser"
 
+

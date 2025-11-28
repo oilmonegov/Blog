@@ -532,3 +532,4 @@ For issues or questions, refer to:
 - Application logs: `storage/logs/laravel.log`
 - Server logs: `/var/log/nginx/` or `/var/log/apache2/`
 
+

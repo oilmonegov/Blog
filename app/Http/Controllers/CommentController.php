@@ -32,3 +32,4 @@ class CommentController extends Controller
             ->with('success', 'Comment posted successfully.');
     }
 }
+

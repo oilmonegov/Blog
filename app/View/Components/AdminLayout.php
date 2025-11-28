@@ -15,3 +15,4 @@ class AdminLayout extends Component
         return view('components.admin-layout');
     }
 }
+

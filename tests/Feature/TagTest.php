@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\User;
 
 test('public can view tag archive page', function () {
+    /** @var \Tests\TestCase $this */
     $tag = Tag::factory()->create(['slug' => 'laravel']);
     $post = Post::factory()->create([
         'status' => PostStatus::PUBLISHED,
@@ -22,6 +23,7 @@ test('public can view tag archive page', function () {
 });
 
 test('tag archive page shows only published posts', function () {
+    /** @var \Tests\TestCase $this */
     $tag = Tag::factory()->create(['slug' => 'laravel']);
     $publishedPost = Post::factory()->create([
         'status' => PostStatus::PUBLISHED,
@@ -42,6 +44,7 @@ test('tag archive page shows only published posts', function () {
 });
 
 test('tag archive page paginates posts', function () {
+    /** @var \Tests\TestCase $this */
     $tag = Tag::factory()->create(['slug' => 'laravel']);
     $posts = Post::factory()->count(15)->create([
         'status' => PostStatus::PUBLISHED,
@@ -60,12 +63,14 @@ test('tag archive page paginates posts', function () {
 });
 
 test('tag archive page returns 404 for non-existent tag', function () {
+    /** @var \Tests\TestCase $this */
     $response = $this->get(route('tags.show', 'non-existent'));
 
     $response->assertStatus(404);
 });
 
 test('tags are auto-created when added to posts', function () {
+    /** @var \Tests\TestCase $this */
     $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
     $post = Post::factory()->create(['author_id' => $admin->id]);
 
@@ -86,6 +91,7 @@ test('tags are auto-created when added to posts', function () {
 });
 
 test('tag slug is auto-generated when created via post', function () {
+    /** @var \Tests\TestCase $this */
     $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
     $post = Post::factory()->create(['author_id' => $admin->id]);
 
@@ -102,6 +108,7 @@ test('tag slug is auto-generated when created via post', function () {
 });
 
 test('duplicate tags are not created when added to posts', function () {
+    /** @var \Tests\TestCase $this */
     $admin = User::factory()->create(['role' => \App\Enums\UserRole::ADMIN]);
     $post = Post::factory()->create(['author_id' => $admin->id]);
     $existingTag = Tag::factory()->create(['name' => 'laravel']);

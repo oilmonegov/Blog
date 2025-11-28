@@ -124,3 +124,4 @@ test('author cannot access admin comments index', function () {
         ->get(route('admin.comments.index'))
         ->assertForbidden();
 });
+
